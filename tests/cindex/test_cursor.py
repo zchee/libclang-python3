@@ -35,7 +35,7 @@ def test_get_children():
 
     # Skip until past start_decl.
     it = tu.cursor.get_children()
-    while it.next().spelling != 'start_decl':
+    while next(it).spelling != 'start_decl':
         pass
 
     tu_nodes = list(it)
