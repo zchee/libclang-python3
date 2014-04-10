@@ -58,9 +58,9 @@ int SOME_DEFINE;
     assert spellings[-1] == 'y'
 
 def test_unsaved_files_2():
-    import StringIO
+    import io
     tu = TranslationUnit.from_source('fake.c', unsaved_files = [
-            ('fake.c', StringIO.StringIO('int x;'))])
+            ('fake.c', io.StringIO('int x;'))])
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-1] == 'x'
 
