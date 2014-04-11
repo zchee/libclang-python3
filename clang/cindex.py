@@ -2050,8 +2050,11 @@ class TranslationUnit(ClangObject):
                 unsaved_array[i].contents = contents.encode ('utf-8')
                 unsaved_array[i].length = len(contents)
 
+        if filename is not None:
+            filename = filename.encode ('utf-8')
+
         ptr = conf.lib.clang_parseTranslationUnit(index,
-            filename.encode('utf-8'), args_array,
+            filename, args_array,
             len(args), unsaved_array,
             len(unsaved_files), options)
 
