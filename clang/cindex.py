@@ -2229,7 +2229,6 @@ class TranslationUnit(ClangObject):
                     # FIXME: It would be great to support an efficient version
                     # of this, one day.
                     value = value.read()
-                    print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
                 unsaved_files_array[i].name = name.encode ('utf-8')
@@ -2293,7 +2292,6 @@ class TranslationUnit(ClangObject):
                     # FIXME: It would be great to support an efficient version
                     # of this, one day.
                     value = value.read()
-                    print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
                 unsaved_files_array[i].name = name.encode ('utf-8')
@@ -3203,19 +3201,19 @@ class Config:
             return Config.library_file
 
         import platform
+        import ctypes.util
         name = platform.system()
 
-        if name == 'Darwin':
-            file = 'libclang.dylib'
-        elif name == 'Windows':
-            file = 'libclang.dll'
+        if name == 'Windows':
+            filename = 'libclang.dll'
         else:
-            file = 'libclang.so'
+            # Does the right thing on Linux and MacOS X
+            filename = ctypes.util.find_library ('clang')
 
         if Config.library_path:
-            file = Config.library_path + '/' + file
+            filename = Config.library_path + '/' + filename
 
-        return file
+        return filename
 
     def get_cindex_library(self):
         try:
