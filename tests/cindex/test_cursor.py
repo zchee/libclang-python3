@@ -8,9 +8,6 @@ from .util import get_cursors
 from .util import get_tu
 
 kInput = """\
-// FIXME: Find nicer way to drop builtins and other cruft.
-int start_decl;
-
 struct s0 {
   int a;
   int b;
@@ -33,12 +30,12 @@ void f0(int a0, int a1) {
 def test_get_children():
     tu = get_tu(kInput)
 
-    # Skip until past start_decl.
     it = tu.cursor.get_children()
-    while next(it).spelling != 'start_decl':
-        pass
-
     tu_nodes = list(it)
+
+    # In Clang 3.4, the first three nodes are __int128_t, __uint128_t and
+    # __builtin_va_list
+    tu_nodes = tu_nodes [3:]
 
     assert len(tu_nodes) == 3
     for cursor in tu_nodes:
@@ -49,7 +46,7 @@ def test_get_children():
     assert tu_nodes[0].spelling == 's0'
     assert tu_nodes[0].is_definition() == True
     assert tu_nodes[0].location.file.name == 't.c'
-    assert tu_nodes[0].location.line == 4
+    assert tu_nodes[0].location.line == 1
     assert tu_nodes[0].location.column == 8
     assert tu_nodes[0].hash > 0
     assert tu_nodes[0].translation_unit is not None
