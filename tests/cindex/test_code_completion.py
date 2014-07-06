@@ -7,7 +7,6 @@ def check_completion_results(cr, expected):
     completions = [str(c) for c in cr.results]
 
     for c in expected:
-        print(c, completions)
         assert c in completions
 
 def test_code_complete():
