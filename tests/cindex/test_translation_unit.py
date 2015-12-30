@@ -1,7 +1,6 @@
 import gc
 import os
 import tempfile
-import tempfile
 
 from clang.cindex import CursorKind
 from clang.cindex import Cursor
