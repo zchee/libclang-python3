@@ -3602,7 +3602,9 @@ class Config:
         import ctypes.util
         name = platform.system()
 
-        if name == 'Windows':
+        if name == 'Darwin':
+            filename = 'libclang.dylib'
+        elif name == 'Windows':
             filename = 'libclang.dll'
         else:
             # Does the right thing on Linux and MacOS X
