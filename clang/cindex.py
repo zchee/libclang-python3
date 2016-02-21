@@ -1573,7 +1573,7 @@ class StorageClass(object):
         if value >= len(StorageClass._kinds):
             StorageClass._kinds += [None] * (value - len(StorageClass._kinds) + 1)
         if StorageClass._kinds[value] is not None:
-            raise ValueError,'StorageClass already loaded'
+            raise ValueError('StorageClass already loaded')
         self.value = value
         StorageClass._kinds[value] = self
         StorageClass._name_map = None
@@ -1594,7 +1594,7 @@ class StorageClass(object):
     @staticmethod
     def from_id(id):
         if id >= len(StorageClass._kinds) or not StorageClass._kinds[id]:
-            raise ValueError,'Unknown storage class %d' % id
+            raise ValueError('Unknown storage class %d' % id)
         return StorageClass._kinds[id]
 
     def __repr__(self):
