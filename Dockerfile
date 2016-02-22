@@ -1,12 +1,14 @@
-FROM buildpack-deps:wily
+FROM buildpack-deps:xenial
 MAINTAINER zchee <k@zchee.io>
 
-ENV LLVM_VERSION=3.7 \
+ENV LLVM_VERSION=3.8 \
 	PYTHONPATH=/llvm/tools/clang/bindings/python \
 	LD_LIBRARY_PATH=$("llvm-config-$LLVM_VERSION --libdir") \
 	NOSE_VERBOSE=2
 
-RUN apt-get update \
+RUN set -ex \
+	&& sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//mirror:\/\/mirrors.ubuntu.com\/mirrors.txt/g' /etc/apt/sources.list \
+	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		clang-$LLVM_VERSION \
 		llvm-$LLVM_VERSION-dev \
