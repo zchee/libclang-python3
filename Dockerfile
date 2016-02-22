@@ -3,7 +3,8 @@ MAINTAINER zchee <k@zchee.io>
 
 ENV LLVM_VERSION=3.7 \
 	PYTHONPATH=/llvm/tools/clang/bindings/python \
-	LD_LIBRARY_PATH=$("llvm-config-$LLVM_VERSION --libdir")
+	LD_LIBRARY_PATH=$("llvm-config-$LLVM_VERSION --libdir") \
+	NOSE_VERBOSE=2
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
@@ -20,6 +21,4 @@ RUN apt-get update \
 COPY . /llvm/tools/clang/bindings/python/
 WORKDIR /llvm/tools/clang/bindings/python
 
-RUN python3 setup.py install
-
-CMD ["nosetests", "-v"]
+CMD ["nosetests"]
