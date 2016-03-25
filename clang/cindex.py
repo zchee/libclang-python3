@@ -2846,6 +2846,11 @@ class CompileCommand(object):
         return conf.lib.clang_CompileCommand_getDirectory(self.cmd)
 
     @property
+    def filename(self):
+        """Get the working filename for this CompileCommand"""
+        return conf.lib.clang_CompileCommand_getFilename(self.cmd)
+
+    @property
     def arguments(self):
         """
         Get an iterable object providing each argument in the
@@ -3036,6 +3041,11 @@ functionList = [
    _CXString.from_result),
 
   ("clang_CompileCommand_getDirectory",
+   [c_object_p],
+   _CXString,
+   _CXString.from_result),
+
+  ("clang_CompileCommand_getFilename",
    [c_object_p],
    _CXString,
    _CXString.from_result),
