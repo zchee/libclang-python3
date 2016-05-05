@@ -19,7 +19,8 @@ kInputsDir = os.path.join(os.path.dirname(__file__), 'INPUTS')
 
 def test_spelling():
     path = os.path.join(kInputsDir, 'hello.cpp')
-    tu = TranslationUnit.from_source(path)
+    index = Index.create()
+    tu = TranslationUnit.from_source(path, index=index)
     assert tu.spelling == path
 
 def test_cursor():
@@ -31,20 +32,23 @@ def test_cursor():
 
 def test_parse_arguments():
     path = os.path.join(kInputsDir, 'parse_arguments.c')
-    tu = TranslationUnit.from_source(path, ['-DDECL_ONE=hello', '-DDECL_TWO=hi'])
+    index = Index.create()
+    tu = TranslationUnit.from_source(path, ['-DDECL_ONE=hello', '-DDECL_TWO=hi'], index=index)
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-2] == 'hello'
     assert spellings[-1] == 'hi'
 
 def test_reparse_arguments():
     path = os.path.join(kInputsDir, 'parse_arguments.c')
-    tu = TranslationUnit.from_source(path, ['-DDECL_ONE=hello', '-DDECL_TWO=hi'])
+    index = Index.create()
+    tu = TranslationUnit.from_source(path, ['-DDECL_ONE=hello', '-DDECL_TWO=hi'], index=index)
     tu.reparse()
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-2] == 'hello'
     assert spellings[-1] == 'hi'
 
 def test_unsaved_files():
+    index = Index.create()
     tu = TranslationUnit.from_source('fake.c', ['-I./'], unsaved_files = [
             ('fake.c', """
 #include "fake.h"
@@ -54,15 +58,16 @@ int SOME_DEFINE;
             ('./fake.h', """
 #define SOME_DEFINE y
 """)
-            ])
+            ], index=index)
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-2] == 'x'
     assert spellings[-1] == 'y'
 
 def test_unsaved_files_2():
     import io
+    index = Index.create()
     tu = TranslationUnit.from_source('fake.c', unsaved_files = [
-            ('fake.c', io.StringIO('int x;'))])
+            ('fake.c', io.StringIO('int x;'))], index=index)
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-1] == 'x'
 
@@ -86,7 +91,8 @@ def test_includes():
     h3 = os.path.join(kInputsDir, "header3.h")
     inc = [(src, h1), (h1, h3), (src, h2), (h2, h3)]
 
-    tu = TranslationUnit.from_source(src)
+    index = Index.create()
+    tu = TranslationUnit.from_source(src, index=index)
     for i in zip(inc, tu.get_includes()):
         assert eq(i[0], i[1])
 
@@ -135,7 +141,8 @@ def test_load():
     assert os.path.exists(path)
     assert os.path.getsize(path) > 0
 
-    tu2 = TranslationUnit.from_ast_file(filename=path)
+    index = Index.create()
+    tu2 = TranslationUnit.from_ast_file(filename=path, index=index)
     assert len(tu2.diagnostics) == 0
 
     foo = get_cursor(tu2, 'foo')
@@ -238,7 +245,8 @@ def test_get_tokens_gc():
 def test_fail_from_source():
     path = os.path.join(kInputsDir, 'non-existent.cpp')
     try:
-        tu = TranslationUnit.from_source(path)
+        index = Index.create()
+        tu = TranslationUnit.from_source(path, index=index)
     except TranslationUnitLoadError:
         tu = None
     assert tu == None
@@ -246,7 +254,8 @@ def test_fail_from_source():
 def test_fail_from_ast_file():
     path = os.path.join(kInputsDir, 'non-existent.ast')
     try:
-        tu = TranslationUnit.from_ast_file(path)
+        index = Index.create()
+        tu = TranslationUnit.from_ast_file(path, index=index)
     except TranslationUnitLoadError:
         tu = None
     assert tu == None
