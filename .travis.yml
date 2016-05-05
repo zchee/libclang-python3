@@ -1,0 +1,48 @@
+services:
+  - docker
+
+language: minimal
+
+env:
+  global:
+    - DOCKER_VERSION=1.10.3
+
+matrix:
+  include:
+
+  - sudo: required
+    dist: trusty
+    env:
+    - LLVM_VERSION=3.6
+
+  - sudo: required
+    dist: trusty
+    env:
+    - LLVM_VERSION=3.7
+
+  - sudo: required
+    dist: trusty
+    env:
+    - LLVM_VERSION=3.8
+
+  - sudo: required
+    dist: trusty
+    env:
+    - LLVM_VERSION=latest
+
+before_install:
+  - sudo service docker stop; sudo rm $(which docker)
+  - curl -L https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${DOCKER_VERSION} > docker
+  - chmod +x docker; sudo mv docker /usr/bin; sudo service docker start; sleep 3
+  - docker version; docker info
+
+script:
+  - if [[ $LLVM_VERSION == 'latest' ]]; then export DOCKERFILE=Dockerfile.master; else export DOCKERFILE=Dockerfile.stable; fi; docker build -t zchee/libclang-python3:${LLVM_VERSION} --build-arg LLVM_VERSION=${LLVM_VERSION} -f ${DOCKERFILE} .
+
+notifications:
+  email: false
+  slack:
+    on_success: never
+    on_failure: always
+    rooms:
+      secure: g4Ip2VoCcTuTQAMN0r2mR4gDRxRlRg+p2BcyQN2M+kfl3X4FzGZSlbiSLuThCWY1f2O2RRSy328/mavycl1JGSHR4itC9yQE/WwLxy+frJspiTu3pl1Kt/ZRg8qnxg0PhLTMR8AOPA3UmsBr5eGtpXpK+AOTr+yn9Lw67Bm+Z0Vbw1HXq29xcPHyNPwOFg9flmwJ4IUdAVPiHH4uSjLyyZwufxcmex4HhIHzBbJhQLq4MmhklfuE5XF2sYo+HJC/tdtVj3rO6v5mxyIU+BjCYGk29NnXjHnG3Lmtp5t9vRmjPBerlSuA/tr0G7Jb7bT2U6PHpTVHDjTzIWFwftiShpbg5NTYl77MNLq0rufx791O2WCmFH2IygTbAjYEK+5tSuwnOBfi/UgZPa4aUIOzQkSFVN1zbeG7jdAqL1834+n6CQlYXDZx2EF5ic7c5iUZzNS7fj1x9OEQuAqMnleKyNYBZ2ribEp+YVgjN6PF1fCfvT2gk3K51ughnRNttl5OD7Kqz5qicXsIrisLayCCoO2mRjeUisyt4Zs8KqYGv8PF2tzSHhR/93uVwSX4FiSmhedGZN4tNHG56KrQ5k0X0CqFLLCKPdq/TCfRloV3iTeNleHud+hf/3zwhpDmTSUvxFzc2Vacl4vefoqaMjSmwnpVAMXSHckkk4G8IsiWBOw=

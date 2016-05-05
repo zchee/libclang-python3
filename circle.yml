@@ -1,0 +1,36 @@
+machine:
+  # https://github.com/circleci/docker/blob/docker-1.10.0/circle.yml#L3-L4
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - docker version; docker info
+    - if [[ -e ~/docker/ubuntu_xenial.tar ]]; then docker load -i ~/docker/ubuntu_xenial.tar; fi
+    - docker build -t "zchee/libclang-python3:3.6" --build-arg LLVM_VERSION=3.6 -f Dockerfile.stable .
+    - docker build -t "zchee/libclang-python3:3.7" --build-arg LLVM_VERSION=3.7 -f Dockerfile.stable .
+    - docker build -t "zchee/libclang-python3:3.8" --build-arg LLVM_VERSION=3.8 -f Dockerfile.stable .
+    - docker build -t "zchee/libclang-python3:latest" -f Dockerfile.master .
+    - mkdir -p ~/docker; docker save ubuntu:xenial > ~/docker/ubuntu_xenial.tar
+
+test:
+  override:
+    - docker run --rm -it "zchee/libclang-python3:3.6"
+    - docker run --rm -it "zchee/libclang-python3:3.7"
+    - docker run --rm -it "zchee/libclang-python3:3.8"
+    - docker run --rm -it "zchee/libclang-python3:latest"
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD -e $DOCKER_EMAIL
+      - docker push "zchee/libclang-python3:3.6"
+      - docker push "zchee/libclang-python3:3.7"
+      - docker push "zchee/libclang-python3:3.8"
+      - docker push "zchee/libclang-python3:latest"
