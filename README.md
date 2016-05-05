@@ -1,5 +1,9 @@
-python3-libclang
-================
+# libclang-python3
+|| **Status** |
+|---|---|
+|**Travis CI** |[![Travis CI](https://travis-ci.org/zchee/libclang-python3.svg?branch=master)](https://travis-ci.org/zchee/libclang-python3)|
+|**Circle CI** |[![Circle CI](https://circleci.com/gh/zchee/libclang-python3.svg?style=svg)](https://circleci.com/gh/zchee/libclang-python3)|
+
 
 This is a port of the `clang` Python bindings to Python 3. I strive to be as
 close as possible to the Python 2 bindings; in fact, the unit tests are
