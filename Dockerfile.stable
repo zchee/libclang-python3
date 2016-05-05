@@ -3,8 +3,7 @@ MAINTAINER zchee <k@zchee.io>
 
 ARG LLVM_VERSION=${LLVM_VERSION:-3.8}
 ENV PYTHONPATH=/src/libclang-python3 \
-	LD_LIBRARY_PATH=$("llvm-config-$LLVM_VERSION --libdir") \
-	NOSE_VERBOSE=2
+	LD_LIBRARY_PATH=$("llvm-config-$LLVM_VERSION --libdir")
 
 RUN set -ex \
 	&& sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//mirror:\/\/mirrors.ubuntu.com\/mirrors.txt/g' /etc/apt/sources.list \

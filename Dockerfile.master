@@ -1,0 +1,48 @@
+FROM ubuntu:xenial
+MAINTAINER zchee <k@zchee.io>
+
+ENV CC=clang \
+	CXX=clang++ \
+	LLVM_VERSION=3.9 \
+	LVM_BOOTSTRAP_VERSION=3.8 \
+	PYTHONPATH=/src/libclang-python3 \
+	LD_LIBRARY_PATH=$("llvm-config --libdir")
+
+RUN set -ex \
+	&& sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//mirror:\/\/mirrors.ubuntu.com\/mirrors.txt/g' /etc/apt/sources.list \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		dpkg-dev g++ gcc libc-dev \
+		ca-certificates curl wget \
+		git openssh-client \
+		automake autogen file \
+		\
+		llvm-$LVM_BOOTSTRAP_VERSION-dev clang-$LVM_BOOTSTRAP_VERSION \
+		ninja-build cmake \
+		python3-dev \
+		python3-pip \
+	&& rm -rf /var/lib/apt/lists/* \
+	\
+	&& ln -s /usr/bin/clang-$LVM_BOOTSTRAP_VERSION /usr/bin/clang \
+	&& ln -s /usr/bin/clang++-$LVM_BOOTSTRAP_VERSION /usr/bin/clang++ \
+	\
+	&& git clone --depth 1 http://llvm.org/git/llvm.git \
+	&& git clone --depth 1 http://llvm.org/git/clang.git /llvm/tools/clang \
+	\
+	&& mkdir /llvm/build \
+	&& cd /llvm/build \
+	\
+	&& cmake -Wno-dev -G Ninja ../ \
+	&& ninja \
+		install-clang \
+		install-clang-headers \
+		install-libclang \
+		install-libclang-headers \
+		install-llvm-config \
+	\
+	&& pip3 install nose
+
+COPY . /src/libclang-python3
+WORKDIR /src/libclang-python3
+
+CMD ["nosetests"]
