@@ -1,4 +1,5 @@
 from clang.cindex import TranslationUnit
+from clang.cindex import Index
 
 def check_completion_results(cr, expected):
     assert cr is not None
@@ -10,6 +11,7 @@ def check_completion_results(cr, expected):
         assert c in completions
 
 def test_code_complete():
+    index = Index.create()
     files = [('fake.c', """
 /// Aaa.
 int test1;
@@ -23,7 +25,7 @@ void f() {
 """)]
 
     tu = TranslationUnit.from_source('fake.c', ['-std=c99'], unsaved_files=files,
-            options=TranslationUnit.PARSE_INCLUDE_BRIEF_COMMENTS_IN_CODE_COMPLETION)
+            options=TranslationUnit.PARSE_INCLUDE_BRIEF_COMMENTS_IN_CODE_COMPLETION, index=index)
 
     cr = tu.codeComplete('fake.c', 9, 1, unsaved_files=files, include_brief_comments=True)
 
@@ -35,6 +37,7 @@ void f() {
     check_completion_results(cr, expected)
 
 def test_code_complete_availability():
+    index = Index.create()
     files = [('fake.cpp', """
 class P {
 protected:
@@ -52,7 +55,7 @@ void f(P x, Q y) {
 }
 """)]
 
-    tu = TranslationUnit.from_source('fake.cpp', ['-std=c++98'], unsaved_files=files)
+    tu = TranslationUnit.from_source('fake.cpp', ['-std=c++98'], unsaved_files=files, index=index)
 
     cr = tu.codeComplete('fake.cpp', 12, 5, unsaved_files=files)
 
