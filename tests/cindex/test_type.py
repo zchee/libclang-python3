@@ -144,7 +144,7 @@ def test_type_spelling():
     assert x is not None
     assert v is not None
     assert c.type.spelling == "int [5]"
-    assert i.type.spelling == "int []"
+    assert i.type.spelling == "int [1]"
     assert x.type.spelling == "int"
     assert v.type.spelling == "int [x]"
 
@@ -263,7 +263,7 @@ def test_element_type():
 
     assert c.type.kind == TypeKind.CONSTANTARRAY
     assert c.type.element_type.kind == TypeKind.INT
-    assert i.type.kind == TypeKind.INCOMPLETEARRAY
+    assert i.type.kind == TypeKind.CONSTANTARRAY
     assert i.type.element_type.kind == TypeKind.INT
     assert v.type.kind == TypeKind.VARIABLEARRAY
     assert v.type.element_type.kind == TypeKind.INT
