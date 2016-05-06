@@ -59,15 +59,15 @@ def test_all_compilecommand():
     cmds = cdb.getAllCompileCommands()
     assert len(cmds) == 3
     expected = [
+        { 'wd': '/home/john.doe/MyProject',
+          'line': ['clang++', '-o', 'project.o', '-c',
+                   '/home/john.doe/MyProject/project.cpp']},
         { 'wd': '/home/john.doe/MyProjectA',
           'line': ['clang++', '-o', 'project2.o', '-c',
                    '/home/john.doe/MyProject/project2.cpp']},
         { 'wd': '/home/john.doe/MyProjectB',
           'line': ['clang++', '-DFEATURE=1', '-o', 'project2-feature.o', '-c',
-                   '/home/john.doe/MyProject/project2.cpp']},
-        { 'wd': '/home/john.doe/MyProject',
-          'line': ['clang++', '-o', 'project.o', '-c',
-                   '/home/john.doe/MyProject/project.cpp']}
+                   '/home/john.doe/MyProject/project2.cpp']}
         ]
     for i in range(len(cmds)):
         assert cmds[i].directory == expected[i]['wd']
