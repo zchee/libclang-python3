@@ -3,11 +3,11 @@
 
 from setuptools import setup
 
-setup(name="clang-python3",
-      version="0.0.1",
-      description="Python3 bindings for libclang",
-      url="https://github.com/zchee/clang-python3",
-      download_url="https://github.com/zchee/clang-python3/releases",
+setup(name="libclang-python3",
+      version="3.8.0-dev",
+      description="libclang bindings for Python3",
+      url="https://github.com/zchee/libclang-python3",
+      download_url="https://github.com/zchee/libclang-python3/releases",
       license="License :: OSI Approved :: University of Illinois/NCSA Open Source License",
       classifiers=[
           "Intended Audience :: Developers",
@@ -16,8 +16,8 @@ setup(name="clang-python3",
           "Development Status :: 5 - Production/Stable",
           "Topic :: Software Development :: Compilers"
       ],
-      keywords=["llvm", "clang", "libclang"],
-      author="Koichi Shiraishi aka zchee",
+      keywords=["llvm", "clang", "libclang", "python3"],
+      author="zchee(Koichi Shiraishi)",
       author_email="k@zchee.io",
       zip_safe=False,
       packages=["clang"]
