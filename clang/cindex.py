@@ -534,7 +534,7 @@ class BaseEnumeration:
         """Get the enumeration name of this cursor kind."""
         if self._name_map is None:
             self._name_map = {}
-            for key, value in self.__class__.__dict__.items():
+            for key, value in list(self.__class__.__dict__.items()):
                 if isinstance(value, self.__class__):
                     self._name_map[value] = key
         return self._name_map[self]
@@ -561,7 +561,7 @@ class CursorKind(BaseEnumeration):
     @staticmethod
     def get_all_kinds():
         """Return all CursorKind enumeration instances."""
-        return list (filter(None, CursorKind._kinds))
+        return list ([_f for _f in CursorKind._kinds if _f])
 
     def is_declaration(self):
         """Test if this is a declaration kind."""
@@ -1628,7 +1628,7 @@ class StorageClass(object):
         """Get the enumeration name of this storage class."""
         if self._name_map is None:
             self._name_map = {}
-            for key,value in StorageClass.__dict__.items():
+            for key,value in list(StorageClass.__dict__.items()):
                 if isinstance(value,StorageClass):
                     self._name_map[value] = key
         return self._name_map[self]
@@ -1701,7 +1701,7 @@ class StorageClass(object):
         """Get the enumeration name of this storage class."""
         if self._name_map is None:
             self._name_map = {}
-            for key,value in StorageClass.__dict__.items():
+            for key,value in list(StorageClass.__dict__.items()):
                 if isinstance(value,StorageClass):
                     self._name_map[value] = key
         return self._name_map[self]
@@ -1857,7 +1857,7 @@ class RefQualifierKind(BaseEnumeration):
         """Get the enumeration name of this kind."""
         if self._name_map is None:
             self._name_map = {}
-            for key, value in RefQualifierKind.__dict__.items():
+            for key, value in list(RefQualifierKind.__dict__.items()):
                 if isinstance(value, RefQualifierKind):
                     self._name_map[value] = key
         return self._name_map[self]
@@ -2846,6 +2846,11 @@ class CompileCommand(object):
         return conf.lib.clang_CompileCommand_getDirectory(self.cmd)
 
     @property
+    def filename(self):
+        """Get the working filename for this CompileCommand"""
+        return conf.lib.clang_CompileCommand_getFilename(self.cmd)
+
+    @property
     def arguments(self):
         """
         Get an iterable object providing each argument in the
@@ -3036,6 +3041,11 @@ functionList = [
    _CXString.from_result),
 
   ("clang_CompileCommand_getDirectory",
+   [c_object_p],
+   _CXString,
+   _CXString.from_result),
+
+  ("clang_CompileCommand_getFilename",
    [c_object_p],
    _CXString,
    _CXString.from_result),
