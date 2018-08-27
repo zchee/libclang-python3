@@ -64,10 +64,13 @@ int SOME_DEFINE;
     assert spellings[-1] == 'y'
 
 def test_unsaved_files_2():
-    import io
+    try:
+        from StringIO import StringIO
+    except:
+        from io import StringIO
     index = Index.create()
     tu = TranslationUnit.from_source('fake.c', unsaved_files = [
-            ('fake.c', io.StringIO('int x;'))], index=index)
+            ('fake.c', StringIO('int x;'))], index=index)
     spellings = [c.spelling for c in tu.cursor.get_children()]
     assert spellings[-1] == 'x'
 
