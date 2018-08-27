@@ -584,7 +584,7 @@ class BaseEnumeration:
     @classmethod
     def from_id(cls, id):
         if id >= len(cls._kinds) or cls._kinds[id] is None:
-            raise ValueError ('Unknown template argument kind %d' % id)
+            raise ValueError('Unknown template argument kind %d' % id)
         return cls._kinds[id]
 
     def __repr__(self):
@@ -2874,6 +2874,7 @@ class TranslationUnit(ClangObject):
                     # FIXME: It would be great to support an efficient version
                     # of this, one day.
                     value = value.read()
+                    print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
                 unsaved_files_array[i].name = name.encode ('utf-8')
@@ -2937,6 +2938,7 @@ class TranslationUnit(ClangObject):
                     # FIXME: It would be great to support an efficient version
                     # of this, one day.
                     value = value.read()
+                    print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
                 unsaved_files_array[i].name = name.encode ('utf-8')
