@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(name="libclang-python3",
-      version="7.0.0",
+      version="7.0.1",
       description="Python3 bindings for libclang ",
       url="https://github.com/zchee/libclang-python3",
       download_url="https://github.com/zchee/libclang-python3/releases",
