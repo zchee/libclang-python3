@@ -72,7 +72,7 @@ def test_references():
     """Ensure that references to TranslationUnit are kept."""
     tu = get_tu('int x;')
     cursors = list(tu.cursor.get_children())
-    assert len(cursors) > 0
+    assert cursors
 
     cursor = cursors[0]
     assert isinstance(cursor.translation_unit, TranslationUnit)
@@ -89,11 +89,9 @@ def test_canonical():
     source = 'struct X; struct X; struct X { int member; };'
     tu = get_tu(source)
 
-    cursors = []
-    for cursor in tu.cursor.get_children():
-        if cursor.spelling == 'X':
-            cursors.append(cursor)
-
+    cursors = [
+        cursor for cursor in tu.cursor.get_children() if cursor.spelling == 'X'
+    ]
     assert len(cursors) == 3
     assert cursors[1].canonical == cursors[2].canonical
 

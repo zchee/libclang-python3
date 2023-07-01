@@ -22,7 +22,7 @@ def get_tu(source, lang='c', all_warnings=False, flags=[]):
     elif lang == 'objc':
         name = 't.m'
     elif lang != 'c':
-        raise Exception('Unknown language: %s' % lang)
+        raise Exception(f'Unknown language: {lang}')
 
     if all_warnings:
         args += ['-Wall', '-Wextra']
@@ -42,11 +42,14 @@ def get_cursor(source, spelling):
     # Convenience for calling on a TU.
     root_cursor = source if isinstance(source, Cursor) else source.cursor
 
-    for cursor in root_cursor.walk_preorder():
-        if cursor.spelling == spelling:
-            return cursor
-
-    return None
+    return next(
+        (
+            cursor
+            for cursor in root_cursor.walk_preorder()
+            if cursor.spelling == spelling
+        ),
+        None,
+    )
 
 def get_cursors(source, spelling):
     """Obtain all cursors from a source object with a specific spelling.
@@ -60,12 +63,11 @@ def get_cursors(source, spelling):
     # Convenience for calling on a TU.
     root_cursor = source if isinstance(source, Cursor) else source.cursor
 
-    cursors = []
-    for cursor in root_cursor.walk_preorder():
-        if cursor.spelling == spelling:
-            cursors.append(cursor)
-
-    return cursors
+    return [
+        cursor
+        for cursor in root_cursor.walk_preorder()
+        if cursor.spelling == spelling
+    ]
 
 
 __all__ = [

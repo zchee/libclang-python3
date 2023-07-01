@@ -24,7 +24,7 @@ def test_create():
 def test_lookup_fail():
     """Check file lookup failure"""
     cdb = CompilationDatabase.fromDirectory(kInputsDir)
-    assert cdb.getCompileCommands('file_do_not_exist.cpp') == None
+    assert cdb.getCompileCommands('file_do_not_exist.cpp') is None
 
 def test_lookup_succeed():
     """Check we get some results if the file exists in the db"""
@@ -113,9 +113,7 @@ def test_2_compilecommand():
 def test_compilecommand_iterator_stops():
     """Check that iterator stops after the correct number of elements"""
     cdb = CompilationDatabase.fromDirectory(kInputsDir)
-    count = 0
-    for cmd in cdb.getCompileCommands('/home/john.doe/MyProject/project2.cpp'):
-        count += 1
+    for count, _ in enumerate(cdb.getCompileCommands('/home/john.doe/MyProject/project2.cpp'), start=1):
         assert count <= 2
 
 def test_compilationDB_references():

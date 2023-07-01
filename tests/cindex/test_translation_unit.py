@@ -249,7 +249,7 @@ def test_fail_from_source():
         tu = TranslationUnit.from_source(path, index=index)
     except TranslationUnitLoadError:
         tu = None
-    assert tu == None
+    assert tu is None
 
 def test_fail_from_ast_file():
     path = os.path.join(kInputsDir, 'non-existent.ast')
@@ -258,4 +258,4 @@ def test_fail_from_ast_file():
         tu = TranslationUnit.from_ast_file(path, index=index)
     except TranslationUnitLoadError:
         tu = None
-    assert tu == None
+    assert tu is None
