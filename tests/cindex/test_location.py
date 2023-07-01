@@ -35,7 +35,7 @@ def test_location():
     assert_location(two.location,line=3,column=5,offset=14)
 
     # adding a space should affect column on first line only
-    tu = get_tu(' ' + baseInput)
+    tu = get_tu(f' {baseInput}')
     one = get_cursor(tu, 'one')
     two = get_cursor(tu, 'two')
 

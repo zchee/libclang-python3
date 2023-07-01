@@ -48,7 +48,7 @@ def test_kind_groups():
                     CursorKind.INCLUSION_DIRECTIVE,
                     CursorKind.PREPROCESSING_DIRECTIVE,
                     CursorKind.OVERLOAD_CANDIDATE):
-            assert len(group) == 0
+            assert not group
         else:
             if len(group) != 1:
                 print (k)

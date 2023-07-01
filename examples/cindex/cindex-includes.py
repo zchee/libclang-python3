@@ -48,7 +48,7 @@ def main():
             # actually include anything. This would generate a 1 node graph.
             line += name(i.include)
         else:
-            line += '%s->%s' % (name(i.source), name(i.include))
+            line += f'{name(i.source)}->{name(i.include)}'
         line += "\n";
         out.write(line)
     out.write("}\n")

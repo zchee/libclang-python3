@@ -81,7 +81,7 @@ def test_references():
 
     tu = get_tu('int x;')
     children = list(tu.cursor.get_children())
-    assert len(children) > 0
+    assert children
 
     cursor = children[0]
     t = cursor.type
@@ -291,7 +291,7 @@ def test_element_count():
         j.type.element_count
         assert False
     except:
-        assert True
+        pass
 
 def test_is_volatile_qualified():
     """Ensure Type.is_volatile_qualified works."""
